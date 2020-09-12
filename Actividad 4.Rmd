@@ -1,0 +1,244 @@
+---
+title: "Actividad 4"
+author: "Duvan Florez Ardila"
+date: "4 de septiembre de 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Minería de datos
+La minería de datos es una herramienta intenta descubrir patrones en conjuntos de datos por medio de la estadística.
+Una implementación de esta herramienta puede ser en predicción de sucesos con respecto a un conjunto de datos.
+
+## Cuadro comparativo 
+```{r}
+knitr::include_graphics("cuadro-disci.png")
+
+```
+
+## Proceso de preparación de datos
+Consiste en varias etapas en las cuales los datos son guiados por un plan preliminar de analisis
+las etapas son:
+
+- verificar la calidad de los cuestionarios (que estos sean aceptables)
+
+- Edición
+
+- Codificación
+
+- Transcribción
+
+- Validacio y depuración 
+
+- Correción de inconsistensias (que hacer con los datos atípicos)
+
+- Elegir una estrategia de análisis de datos
+
+## ¿Qué es un dato faltante? 
+Son aquellos datos que pueden alterar de forma negativa el resultado de un análisis estadístico debido a su ausencia en estos.
+un ejemplo es querer sacar una media de 3 valores, pero solo tienes 2 de estos, entonces, el tercero vendría a ser el dato faltante
+
+## ¿Qué es un dato atípico? 
+Son aquellos datos que se encuentran extremadamente alejados del conjunto de datos que sea mayor (normalmente son aquellos que rodean la media).
+ejemplo: De los 5 niños encuestados 3 dijeron tener 9 años, 1 dijo tener 8 años y el último dijo tener 64 años. El niño que dijo tener 64 años vendría a ser el dato atípico.
+
+## ¿Qué es análisis de correlación? 
+Hace referencia al vínculo que tienen varios eventos, y con esta misma se averigua si existe tal vínculo.
+Como tal este análisis marca que tan similares son los patrones que hay en distintas muestras de varios conjuntos de datos que tengan cierta relación.
+
+Este tipo de análisis tiene un coeficiente, el cual varía dependiendo de la correlación que exista, de modo que tal coeficiente determina si es positiva o negativa la correlación.
+
+##### Correlación positiva
+Si este coeficiente es positivo indica que los datos tienden a variar de forma proporcional.
+
+##### Correlación negativa
+Si este coeficiente es negativo indica que los datos tienden a variar de forma inversamente proporcional.
+
+```{r}
+# ejemplo:
+a = c(3,5,9,10,20,21,24,24,27,35)
+b = c(100,90,80,45,50,50,60,40,25,20)
+cor(a,b)
+# debido a que es menor que cero es una correlación negativa, espeficicamente negativa fuerte.
+```
+
+### Métodos de correlación
+
+##### Coeficiente de correlación de Pearson
+Es una medida lineal entre dos variables, y en esta medida se implementa la ecuación de la recta, donde cada variable de tal ecuación corresponde a una formula específica en que se relacionan dos variables aleatorias.
+
+##### Coeficiente de correlación de Spearman
+Es útil cuando las variables tienden a moverse a una misma dirección, y que ese movimiento no sea constante. En sí se implementa cuando la relación entre las variables no es lineal, aunque el coeficiente Spearman es menos sensible en cuanto a datos atípicos.
+
+## Matriz de correlación de la base de datos obesidad
+```{r}
+bsobesidad=data.frame(read.csv(file = "base de datos obesidad.csv", dec = ",", header = TRUE, sep = ";"))
+bsobesidad[1:4,c(2,3,4,19)]
+```
+```{r}
+matriz = cbind(bsobesidad$Edad,bsobesidad$Estatura, bsobesidad$Peso, bsobesidad$IMC)
+# Matriz de correlación
+matriz.cor = cor(matriz, method = "pearson")
+dimnames(matriz.cor) = list(c("Edad", "Estatura", "Peso", "IMC"), c("Edad", "Estatura", "Peso", "IMC"))
+print(matriz.cor)
+```
+
+## Lab: Introducción a R
+
+```{r}
+#Creación de un vector
+x = c(1,2,3,4)
+y = c(5,6,7,8)
+
+#Dimensión del vector
+length(x)
+length(y)
+
+#Suma entre vectores
+x+y
+
+#Impresión de los nombres de los datos que se hayan creados e importados. (Environment)
+ls()
+
+#Eliminación de los datos almacenados
+rm(x,y) #Se eliminan los vectores X & Y
+ls()
+rm(list = ls()) #Se eliminan todos los datos que se encuentren
+ls()
+```
+#### Matrices
+```{r}
+#Se agrega un vector y se segmenta dependiendo del número de filas y columnas
+m = matrix(data = c(1,2,3,4,5,6,7,8,9), nrow = 3, ncol = 3)
+print(m)
+```
+```{r}
+#También se puede omitir los parámetros ncol y nrow
+n = matrix(data = c(6,5,4,3,2,1),3,2) # 3 filas y 2 columnas
+print(n)
+```
+#### Comandos matemáticos
+```{r}
+sqrt(n) #Sacar raíz cuadrada, en este caso a la matriz x
+n^2 #La función "^" lo que hace es potenciar, en este caso la matriz fue potenciada a la 2
+```
+#### comandos estadísticos
+```{r}
+#(rnorm-"r = random" y "norm = normal")Crea una cantida de valores n aleatorios dependiendo de una media y desviación estándar en una población. 
+rx = rnorm(4)# mean = 0, sd = 1
+ry = rx + rnorm(4,mean = 12, sd = 4)
+cbind(rx,ry)
+cor(rx,ry) #cor() encuentra la correlación que hay entre varios conjuntos de datos, en este caso en rx y ry
+
+#La función set.seed sirve para generar una serie de números aleatorios cuyo valores no cambien si se vuelven a crear
+#Puede llegar a ser útil en cuanto a simulación se refiere
+set.seed(5)
+rnorm(6)
+set.seed(5)
+rnorm(6)
+#Los valores son los mismos
+set.seed(7)
+dato = rnorm(6)
+
+#mean-media
+mean(dato)
+#var variación 
+var(dato)
+#sd desviación estándar
+sd(dato)
+# sd(dato) = sqrt(var(dato))
+sqrt(var(dato))
+
+```
+#### Gráfica
+```{r}
+plot(rx,ry, main = "plot rx y ry") #Crean un gráfico en donde se compara rx y ry
+#Esta serie de comandos sirve para guardar una gráfica, en este caso un pdf
+pdf("Figure.pdf")
+plot(rx,ry, main = "plot rx y ry")
+dev.off()
+
+```
+#### Secuencias
+```{r}
+secuencia1 = seq(1,10)# crea una secuencia desde el 1 hasta el 10
+print(secuencia1)
+#Otra forma
+secuencia2 = 1:10
+print(secuencia2)
+
+#Crea una secuencia de -pi hasta pi con una cantidad de números igual a 50
+x = seq(-pi,pi, length = 50)
+print(x)
+plot(x)
+```
+#### Contour,image y persp
+```{r}
+y=x
+z = outer(x,y,function(x,y)cos(y)/(1+x^2))#Se crea una secuenca a partir de x & y
+contour(x,y,z) #Crea un digrama de contorno de vista superior al plano
+contour(x,y,z,nlevels = 45, add = T) #nlevels lo que hace es agregar líneas de contorno
+za = (z-t(z)/2)
+contour(x,y,za,nlevels = 15)
+
+#image
+image(x,y,za)#Crea una imagen dependiendo de los parametros ingresados (es básicamente un contour con colores)
+persp(x,y,za)#Crea una gráfica tridimensional 
+persp(x,y,za,theta = 15)# theta altera la perspectiva de la imagen en el eje x(o sea rota la imagen en el eje x)
+persp(x,y,za,theta = 15, phi = 20)#Y phi rota la imagen en el eje y
+```
+#### Indexing data
+```{r}
+A = matrix(1:12,3,4)
+print(A)
+A[3,4] #Se llama un dato con respecto a su posición, en este caso el dato está en la fila 3 y columna 4
+#también se puede hacer multiples selecciones
+A[c(1,2),c(3,4)]#Donde C(1,2) son las filas, o sea la fila 1 y la fila 2, y c(3,4) son las columnas. De modo tal que se crea una matriz 
+#Otro modo de hacerlo es por secuencias
+A[1:2,3:4] #Es igual que el anterior
+#Otra forma de llamar por posición es nomostrando
+A[-c(1,2),-3:-4]#Donde no se muestran los valores situados entre las columnas 3, 4 y las filas 1,2
+
+```
+#### Load data
+Si se tiene un archivo, en este caso un csv lo primero que se debe hacer es importarlo.
+```{r}
+tabla = read.csv(file = "base de datos obesidad.csv", dec = ",", header = TRUE, sep = ";")
+#Una vez hecho se puede montar en una estructura de datos bidimensional
+datos_obesidad = data.frame(tabla)
+#Para despues mostrar la información de la tabla que se creó
+dim(datos_obesidad)#Muestra las dimensiones de la tabla
+datos_obesidad[1:4,1:10]
+```
+
+Al ser una estructura de datos se puede hacer multiples cosas con ella, algunos ejemplos son:
+```{r}
+print(datos_obesidad$Sexo[1:5])#Como imprimir 5 valores de una columna
+summary(datos_obesidad$IMC)#Información con respecto de los valores de interés que tiene una columna
+
+hist(datos_obesidad$Edad, col = 4)#Histogramas. "col" hace referencia al color
+pairs(~datos_obesidad$Edad+datos_obesidad$Estatura)#Diagramas de dispersión 
+
+```
+```{r}
+plot(datos_obesidad$Peso,datos_obesidad$IMC)#Hacer un diagrama donde se relacionen diversos parámetros
+identify(datos_obesidad$Peso,datos_obesidad$IMC)
+```
+
+## Bibliografía
+https://es.wikipedia.org/wiki/Miner%C3%ADa_de_datos
+https://es.wikipedia.org/wiki/Aprendizaje_autom%C3%A1tico
+https://cleverdata.io/diferencias-bi-machine-learning/
+https://www.conasa.es/blog/business-intelligence-y-big-data-son-lo-mismo/
+https://gravitar.biz/bi/machine-learning/
+https://www.recluit.com/diferencias-entre-machine-learning-y-data-mining/
+https://www.iberdrola.com/innovacion/que-es-inteligencia-artificial
+https://dle.rae.es/?id=GjpDTiC
+https://www.monografias.com/trabajos106/diseno-investigacion-preparacion-datos/diseno-investigacion-preparacion-datos.shtml#elprocesoa
+https://brainly.lat/tarea/4199882
+http://conogasi.org/articulos/analisis-de-correlacion/
+https://www.youtube.com/watch?v=fNeXC8d5En8
+https://support.minitab.com/es-mx/minitab/18/help-and-how-to/statistics/basic-statistics/how-to/correlation/perform-the-analysis/select-the-method/
